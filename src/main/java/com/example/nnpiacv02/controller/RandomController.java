@@ -17,12 +17,12 @@ public class RandomController {
         this.randomService = randomService;
     }
 
-    @GetMapping("${app.basePath}/objects")
+    @GetMapping("/objects")
     public List<RandomModel> getAllObjects() {
         return randomService.getAllObjects();
     }
 
-    @GetMapping("${app.basePath}/objects/{id}")
+    @GetMapping("/objects/{id}")
     public RandomModel getObjectById(@PathVariable int id) {
         return randomService.getObjectById(id);
     }
