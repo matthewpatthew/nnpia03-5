@@ -3,6 +3,9 @@ package com.example.nnpiacv02.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+//Controller je obecný typ třídy v Spring MVC frameworku, který zpracovává HTTP požadavky.
+//RestController je specializovaný typ Controller, který je určen specificky pro vytváření
+// REST API, které poskytuje datové služby prostřednictvím HTTP protokolu.
 public class HelloController {
 
     @GetMapping("${app.basePath}")
