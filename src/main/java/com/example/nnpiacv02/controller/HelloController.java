@@ -23,8 +23,8 @@ public class HelloController {
         return "Requested path: " + path;
     }
 
-    @GetMapping("/query") //http://localhost:8080/api/v1/query?query=rndmsg
-    public String queryParam(@RequestParam("query") String message){
+    @GetMapping("/query") //http://localhost:8080/api/v1/query?name=rndmsg
+    public String queryParam(@RequestParam("name") String message){
         return "Hello world from query with param, message: " + message;
     }
 

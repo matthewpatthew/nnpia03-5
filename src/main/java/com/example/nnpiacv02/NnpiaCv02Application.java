@@ -9,5 +9,4 @@ public class NnpiaCv02Application {
     public static void main(String[] args) {
         SpringApplication.run(NnpiaCv02Application.class, args);
     }
-
 }
