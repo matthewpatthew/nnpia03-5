@@ -1,6 +1,8 @@
-package com.example.nnpiacv02.service;
+package com.example.nnpiacv02.service.impl;
 
 
+import com.example.nnpiacv02.service.RandomModel;
+import com.example.nnpiacv02.service.RandomService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class RandomServiceImpl implements RandomService{
+public class RandomServiceImpl implements RandomService {
 
     public RandomServiceImpl(){
         objectMap.put(1, new RandomModel(1, "První", "Popis1"));

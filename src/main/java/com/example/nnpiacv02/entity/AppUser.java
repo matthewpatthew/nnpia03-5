@@ -3,6 +3,7 @@ package com.example.nnpiacv02.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.List;
 //create, update, validate, create-drop, none
 @Data
 @Entity(name = "app_user")
+@NoArgsConstructor
 public class AppUser {
 
     @ManyToMany
@@ -35,4 +37,12 @@ public class AppUser {
     private Date creationDate;
 
     private Date updateDate;
+
+    public AppUser(String username, String password, boolean active, Date creationDate, Date updateDate) {
+        this.username = username;
+        this.password = password;
+        this.active = active;
+        this.creationDate = creationDate;
+        this.updateDate = updateDate;
+    }
 }
