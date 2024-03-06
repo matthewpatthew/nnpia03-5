@@ -5,6 +5,10 @@ import com.example.nnpiacv02.entity.AppUser;
 import com.example.nnpiacv02.exception.AppUserException;
 import com.example.nnpiacv02.repository.AppUserRepository;
 import com.example.nnpiacv02.service.AppUserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -13,13 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AppUserServiceImpl implements AppUserService {
 
     private final AppUserRepository appUserRepository;
-
-    public AppUserServiceImpl(AppUserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
-    }
 
     @Override
     public List<AppUser> findAllUsers() {
@@ -51,10 +52,10 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser createNewAppUser(AppUserDtoInput appUserDtoInput) {
+    public AppUser createNewAppUser(AppUserDtoInput appUserDtoInput, PasswordEncoder passwordEncoder) {
         AppUser appUser = new AppUser(
                 appUserDtoInput.getUsername(),
-                appUserDtoInput.getPassword(),
+                passwordEncoder.encode(appUserDtoInput.getPassword()),
                 appUserDtoInput.isActive(),
                 new Date(),
                 new Date()
@@ -77,5 +78,9 @@ public class AppUserServiceImpl implements AppUserService {
     public void deleteAppUser(Long id) throws AppUserException {
         AppUser appUser = findUserById(id);
         appUserRepository.delete(appUser);
+    }
+
+    private PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

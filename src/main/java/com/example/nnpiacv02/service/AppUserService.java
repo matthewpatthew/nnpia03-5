@@ -5,6 +5,7 @@ import com.example.nnpiacv02.entity.AppUser;
 import com.example.nnpiacv02.exception.AppUserException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,7 @@ public interface AppUserService {
 
     AppUser findUserById(Long id) throws AppUserException;
 
-    AppUser createNewAppUser(AppUserDtoInput appUserDtoInput);
+    AppUser createNewAppUser(AppUserDtoInput appUserDtoInput, PasswordEncoder passwordEncoder);
 
     AppUser updateAppUser(Long id, AppUserDtoInput appUserDtoInput) throws AppUserException;
 

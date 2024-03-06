@@ -19,6 +19,5 @@ public class AppUserDtoInput {
     private String password;
 
     @NotNull
-    @NotBlank
     private boolean active;
 }

@@ -17,12 +17,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final CustomAppUserDetailService customAppUserDetailService;
+
+    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomAppUserDetailService customAppUserDetailService) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.customAppUserDetailService = customAppUserDetailService;
+    }
 
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
@@ -36,8 +40,7 @@ public class WebSecurityConfig {
                         -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("app-user/auth/login").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

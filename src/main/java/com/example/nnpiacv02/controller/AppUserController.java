@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,8 @@ public class AppUserController {
     private final AuthenticationManager authenticationManager;
 
     private final AppUserService appUserService;
+
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping()
     public ResponseEntity<List<AppUserDto>> findAllUsers() {
@@ -55,7 +58,7 @@ public class AppUserController {
 
     @PostMapping
     public ResponseEntity<AppUserDto> createNewAppUser(@RequestBody @Valid AppUserDtoInput appUserDtoInput) {
-        AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.createNewAppUser(appUserDtoInput));
+        AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.createNewAppUser(appUserDtoInput, passwordEncoder));
         return new ResponseEntity<>(appUserDto, HttpStatus.CREATED);
     }
 
