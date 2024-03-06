@@ -1,4 +1,4 @@
-package com.example.nnpiacv02.service;
+package com.example.nnpiacv02.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -16,13 +16,13 @@ import java.util.List;
 public class AppUser {
 
     @ManyToMany
-    @JoinTable(name = "app_user_role",joinColumns = @JoinColumn(name = "app_user_id"),
+    @JoinTable(name = "app_user_role", joinColumns = @JoinColumn(name = "app_user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnore
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "appUser")
-    private List<Task> tasks  = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

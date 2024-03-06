@@ -12,7 +12,7 @@ import java.util.List;
 public class Role {
 
     @ManyToMany
-    @JoinTable(name = "app_user_role",joinColumns = @JoinColumn(name = "role_id"),
+    @JoinTable(name = "app_user_role", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "app_user_id"))
     private List<AppUser> appUsers = new ArrayList<>();
 

@@ -7,19 +7,17 @@ import com.example.nnpiacv02.exception.AppUserException;
 import com.example.nnpiacv02.mapper.AppUserMapper;
 import com.example.nnpiacv02.service.AppUserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @RequestMapping("/app-user")
+@RequiredArgsConstructor
 public class AppUserController {
 
     private final AppUserService appUserService;
-
-    public AppUserController(AppUserService appUserService) {
-        this.appUserService = appUserService;
-    }
 
     @GetMapping({"/{id}"})
     public ResponseEntity<AppUserDto> findAppUserById(@PathVariable Long id) throws AppUserException {
