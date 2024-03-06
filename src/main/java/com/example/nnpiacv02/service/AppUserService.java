@@ -11,9 +11,13 @@ import java.util.Optional;
 
 public interface AppUserService {
 
+    List<AppUser> findAllUsers();
+
     List<AppUser> findAppUserByActive(Boolean active);
 
     List<AppUser> findUsersByRole(String roleName);
+
+    AppUser findUserByUsername(String username);
 
     AppUser findUserById(Long id) throws AppUserException;
 
@@ -22,4 +26,6 @@ public interface AppUserService {
     AppUser updateAppUser(Long id, AppUserDtoInput appUserDtoInput) throws AppUserException;
 
     void deleteAppUser(Long id) throws AppUserException;
+
+
 }

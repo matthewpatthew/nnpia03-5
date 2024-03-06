@@ -22,6 +22,11 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    public List<AppUser> findAllUsers() {
+        return appUserRepository.findAll();
+    }
+
+    @Override
     public List<AppUser> findAppUserByActive(Boolean active) {
         return appUserRepository.findAppUserByActive(active);
     }
@@ -29,6 +34,11 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public List<AppUser> findUsersByRole(String roleName) {
         return appUserRepository.findUsersByRole(roleName);
+    }
+
+    @Override
+    public AppUser findUserByUsername(String username) {
+        return appUserRepository.findByUsername(username);
     }
 
     @Override
