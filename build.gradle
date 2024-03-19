@@ -36,6 +36,7 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.11.0'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.11.0'
     runtimeOnly 'com.h2database:h2'
+    implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.3.1'
 
 }
 

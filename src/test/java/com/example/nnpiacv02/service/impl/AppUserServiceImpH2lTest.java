@@ -7,6 +7,7 @@ import com.example.nnpiacv02.repository.AppUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,22 +20,21 @@ class AppUserServiceImpH2lTest {
 
     @Autowired
     private AppUserServiceImpl appUserService;
-
     @Autowired
     private AppUserRepository appUserRepository;
-
+    @Mock
+    PasswordEncoder passwordEncoder;
     private AppUser savedUser;
 
     @BeforeEach
     void setUp() {
         AppUserDtoInput appUserDtoInput = new AppUserDtoInput("Username", "Password", true);
-        savedUser = appUserService.createNewAppUser(appUserDtoInput, passwordEncoder());
+        savedUser = appUserService.createNewAppUser(appUserDtoInput, passwordEncoder);
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println(appUserRepository.findById(savedUser.getId()).get().getId());
-        //appUserRepository.deleteAll();
+        appUserRepository.deleteAll();
     }
 
     @Test
@@ -44,9 +44,5 @@ class AppUserServiceImpH2lTest {
         assertNotNull(foundUser);
         assertEquals(savedUser.getUsername(), foundUser.getUsername());
         assertThrows(AppUserException.class, () -> appUserService.findUserById(9999L));
-    }
-
-    private PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
