@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class CustomAppUserDetailService implements UserDetailsService {
 
     private final AppUserService appUserService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser user = appUserService.findUserByUsername(username);

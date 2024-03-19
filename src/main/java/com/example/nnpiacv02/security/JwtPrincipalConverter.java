@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class JwtPrincipalConverter {
 
-    public UserPrincipal convert(DecodedJWT jwt){
+    public UserPrincipal convert(DecodedJWT jwt) {
         return UserPrincipal.builder()
                 .id(Long.parseLong(jwt.getSubject()))
                 .username(jwt.getClaim("u").asString())
@@ -17,9 +17,9 @@ public class JwtPrincipalConverter {
                 .build();
     }
 
-    private List<SimpleGrantedAuthority> extractAuthoritiesFromClaim(DecodedJWT jwt){
+    private List<SimpleGrantedAuthority> extractAuthoritiesFromClaim(DecodedJWT jwt) {
         var claim = jwt.getClaim("a");
-        if(claim.isNull()||claim.isMissing()){
+        if (claim.isNull() || claim.isMissing()) {
             return List.of();
         }
         return claim.asList(SimpleGrantedAuthority.class);

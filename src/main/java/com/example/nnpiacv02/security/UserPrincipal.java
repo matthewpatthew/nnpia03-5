@@ -19,7 +19,8 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private final String password;
 
-    private final  Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

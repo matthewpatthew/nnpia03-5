@@ -1,19 +1,19 @@
 server:
-    port: 9000
-    servlet:
-        context-path: /api/v1
+  port: 9000
+  servlet:
+    context-path: /api/v1
 spring:
-    datasource:
-        url: jdbc:postgresql://localhost:5432/nnpia
-        username: nnpia
-        password: nnpia
-    jpa:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nnpia
+    username: nnpia
+    password: nnpia
+  jpa:
+    hibernate:
+      ddl-auto: update
+      properties:
         hibernate:
-            ddl-auto: update
-            properties:
-                hibernate:
-                    dialect: org.hibernate.dialect.PostgreSQL81Dialect
+          dialect: org.hibernate.dialect.PostgreSQL81Dialect
 
 security:
-    jwt:
-        secret-key: verysecretkey123
+  jwt:
+    secret-key: verysecretkey123

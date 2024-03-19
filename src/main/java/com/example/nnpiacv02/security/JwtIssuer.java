@@ -16,6 +16,7 @@ import java.util.List;
 public class JwtIssuer {
 
     private final JwtProperties properties;
+
     public String issue(long id, String username, List<String> roles) {
         return JWT.create()
                 .withSubject(String.valueOf(id))
