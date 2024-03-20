@@ -13,6 +13,7 @@ public class JwtDecoder {
     private final JwtProperties properties;
 
     public DecodedJWT decode(String token) {
+        //JWT.decode does not verify token signature
         return JWT.require(Algorithm.HMAC256(properties.getSecretKey()))
                 .build()
                 .verify(token);

@@ -11,8 +11,11 @@ import java.util.List;
 @Entity
 public class Role {
 
+    @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "app_user_role", joinColumns = @JoinColumn(name = "role_id"),
+    @JoinTable(
+            name = "app_user_role",
+            joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "app_user_id"))
     private List<AppUser> appUsers = new ArrayList<>();
 

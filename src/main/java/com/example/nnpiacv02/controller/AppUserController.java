@@ -6,11 +6,11 @@ import com.example.nnpiacv02.entity.AppUser;
 import com.example.nnpiacv02.exception.AppUserException;
 import com.example.nnpiacv02.mapper.AppUserMapper;
 import com.example.nnpiacv02.security.JwtIssuer;
-import com.example.nnpiacv02.security.LoginRequest;
-import com.example.nnpiacv02.security.LoginResponse;
+import com.example.nnpiacv02.model.LoginRequest;
+import com.example.nnpiacv02.model.LoginResponse;
 import com.example.nnpiacv02.security.UserPrincipal;
 import com.example.nnpiacv02.service.AppUserService;
-import jakarta.validation.Valid;
+import com.example.nnpiacv02.service.impl.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +31,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppUserController {
 
-    private final JwtIssuer jwtIssuer;
-
-    private final AuthenticationManager authenticationManager;
-
     private final AppUserService appUserService;
+
+    private final AuthService authService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -57,14 +55,14 @@ public class AppUserController {
     }
 
     @PostMapping
-    public ResponseEntity<AppUserDto> createNewAppUser(@RequestBody @Valid AppUserDtoInput appUserDtoInput) {
+    public ResponseEntity<AppUserDto> createNewAppUser(@RequestBody @Validated AppUserDtoInput appUserDtoInput) {
         AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.createNewAppUser(appUserDtoInput, passwordEncoder));
         return new ResponseEntity<>(appUserDto, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<AppUserDto> updateAppUser(@PathVariable("id") Long id,
-                                                    @RequestBody @Valid AppUserDtoInput appUserDtoInput) throws AppUserException {
+                                                    @RequestBody @Validated AppUserDtoInput appUserDtoInput) throws AppUserException {
         AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.updateAppUser(id, appUserDtoInput));
         return ResponseEntity.ok(appUserDto);
     }
@@ -77,24 +75,17 @@ public class AppUserController {
 
     @PostMapping("/auth/login")
     public LoginResponse login(@RequestBody @Validated LoginRequest request) {
-        var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        var principal = (UserPrincipal) authentication.getPrincipal();
-
-        var roles = principal.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-
-        var token = jwtIssuer.issue(principal.getId(), principal.getUsername(), roles);
-        return LoginResponse.builder()
-                .accessToken(token)
-                .build();
+        return authService.attemptLogin(request.getUsername(), request.getPassword());
     }
 
-    @GetMapping("/whoami")
+    @GetMapping("/secured")
     public String secured(@AuthenticationPrincipal UserPrincipal principal) {
-        return "Ur logged in as user: " + principal.getUsername() + " with id: " + principal.getId();
+        return "Ur logged in as user: " + principal.getUsername() + " with id: " + principal.getUserId();
     }
+
+    @GetMapping("/admin")
+    public String admin(@AuthenticationPrincipal UserPrincipal principal) {
+        return "Ur ADMIN: " + principal.getUsername() + " with id: " + principal.getUserId();
+    }
+
 }

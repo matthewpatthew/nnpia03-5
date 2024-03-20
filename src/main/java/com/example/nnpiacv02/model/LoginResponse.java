@@ -1,4 +1,4 @@
-package com.example.nnpiacv02.security;
+package com.example.nnpiacv02.model;
 
 import lombok.Builder;
 import lombok.Getter;

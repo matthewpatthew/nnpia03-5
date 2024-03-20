@@ -17,10 +17,10 @@ public class JwtIssuer {
 
     private final JwtProperties properties;
 
-    public String issue(long id, String username, List<String> roles) {
+    public String issue(long userId, String username, List<String> roles) { //TODO ROLES
         return JWT.create()
-                .withSubject(String.valueOf(id))
-                .withExpiresAt(Instant.now().plus(Duration.of(1, ChronoUnit.DAYS)))
+                .withSubject(String.valueOf(userId))
+                .withExpiresAt(Instant.now().plus(Duration.of(1, ChronoUnit.DAYS))) //should be like 5 min i real scenario
                 .withClaim("u", username)
                 .withClaim("a", roles)
                 .sign(Algorithm.HMAC256(properties.getSecretKey()));

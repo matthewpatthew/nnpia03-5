@@ -17,16 +17,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final CustomAppUserDetailService customAppUserDetailService;
-
-    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomAppUserDetailService customAppUserDetailService) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.customAppUserDetailService = customAppUserDetailService;
-    }
 
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
@@ -35,12 +31,12 @@ public class WebSecurityConfig {
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/**") // map current config to given resource path
-                .sessionManagement(sessionManagementConfigurer
-                        -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .securityMatcher("/**") //config works on the entire app (/api/**)
+                .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("app-user/auth/login").permitAll()
+                        .requestMatchers("app-user/auth/login").permitAll() //this is permited to anyone
+                        .requestMatchers(("app-user/admin")).hasRole("Admin")
                         .anyRequest().authenticated()
                 );
         return http.build();

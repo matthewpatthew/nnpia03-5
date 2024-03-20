@@ -29,7 +29,7 @@ public class CustomAppUserDetailService implements UserDetailsService {
                 .toList();
 
         return UserPrincipal.builder()
-                .id(user.getId())
+                .userId(user.getId())
                 .username(user.getUsername())
                 .authorities(userRoles)
                 .password(user.getPassword())

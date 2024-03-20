@@ -12,7 +12,9 @@ import java.util.Collection;
 @Getter
 public class UserPrincipal implements UserDetails {
 
-    private final long id;
+    //change return values to true
+
+    private final long userId;
 
     private final String username;
 

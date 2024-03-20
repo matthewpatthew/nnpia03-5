@@ -25,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         extractTokenFromRequest(request)
                 .map(jwtDecoder::decode)
+                //str -> jwtDecoder.decode(str)
                 .map(jwtPrincipalConverter::convert)
                 .map(UserPrincipalAuthenticationToken::new)
                 .ifPresent(SecurityContextHolder.getContext()::setAuthentication);
@@ -32,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-
+    //Authorization: Bearer grgwgw5egw5g5we5g5w
     private Optional<String> extractTokenFromRequest(HttpServletRequest request) {
         var token = request.getHeader("Authorization");
         if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {

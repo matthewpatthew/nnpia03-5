@@ -15,10 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AppUser {
 
-    @ManyToMany
-    @JoinTable(name = "app_user_role", joinColumns = @JoinColumn(name = "app_user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
+    @ManyToMany(mappedBy = "appUsers")
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "appUser")
