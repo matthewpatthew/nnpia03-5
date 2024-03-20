@@ -35,8 +35,9 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("app-user/auth/login").permitAll() //this is permited to anyone
-                        .requestMatchers(("app-user/admin")).hasRole("Admin")
+                        .requestMatchers("auth/login").permitAll()
+                        .requestMatchers(("users/all")).permitAll()
+                        .requestMatchers(("users/admin/**")).hasRole("Admin") //v DB -> ROLE_Admin, Spring automaticky pracuje s tímto prefixem
                         .anyRequest().authenticated()
                 );
         return http.build();

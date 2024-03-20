@@ -64,11 +64,11 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser updateAppUser(Long id, AppUserDtoInput appUserDtoInput) throws AppUserException {
+    public AppUser updateAppUser(Long id, AppUserDtoInput appUserDtoInput, PasswordEncoder passwordEncoder) throws AppUserException {
         AppUser appUser = findUserById(id);
         appUser.setUsername(appUserDtoInput.getUsername());
         appUser.setActive(appUserDtoInput.isActive());
-        appUser.setPassword(appUserDtoInput.getPassword());
+        appUser.setPassword(passwordEncoder.encode(appUserDtoInput.getPassword()));
         appUser.setUpdateDate(new Date());
 
         return appUserRepository.save(appUser);
@@ -78,9 +78,5 @@ public class AppUserServiceImpl implements AppUserService {
     public void deleteAppUser(Long id) throws AppUserException {
         AppUser appUser = findUserById(id);
         appUserRepository.delete(appUser);
-    }
-
-    private PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

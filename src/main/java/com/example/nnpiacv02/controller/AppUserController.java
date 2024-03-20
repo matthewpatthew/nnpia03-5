@@ -27,17 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/app-user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class AppUserController {
 
     private final AppUserService appUserService;
 
-    private final AuthService authService;
-
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping()
+    @GetMapping("/all")
     public ResponseEntity<List<AppUserDto>> findAllUsers() {
         List<AppUser> appUsers = appUserService.findAllUsers();
         List<AppUserDto> appUserDto = new ArrayList<>();
@@ -47,45 +45,34 @@ public class AppUserController {
         return ResponseEntity.ok(appUserDto);
     }
 
-    @GetMapping({"/{id}"})
+    @GetMapping({"/admin/{id}"})
     public ResponseEntity<AppUserDto> findAppUserById(@PathVariable Long id) throws AppUserException {
         AppUser appUser = appUserService.findUserById(id);
         AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUser);
         return ResponseEntity.ok(appUserDto);
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<AppUserDto> createNewAppUser(@RequestBody @Validated AppUserDtoInput appUserDtoInput) {
         AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.createNewAppUser(appUserDtoInput, passwordEncoder));
         return new ResponseEntity<>(appUserDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<AppUserDto> updateAppUser(@PathVariable("id") Long id,
                                                     @RequestBody @Validated AppUserDtoInput appUserDtoInput) throws AppUserException {
-        AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.updateAppUser(id, appUserDtoInput));
+        AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.updateAppUser(id, appUserDtoInput, passwordEncoder));
         return ResponseEntity.ok(appUserDto);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<String> deleteAppUser(@PathVariable("id") Long id) throws AppUserException {
         appUserService.deleteAppUser(id);
         return ResponseEntity.ok("User deleted " + id);
     }
 
-    @PostMapping("/auth/login")
-    public LoginResponse login(@RequestBody @Validated LoginRequest request) {
-        return authService.attemptLogin(request.getUsername(), request.getPassword());
-    }
-
-    @GetMapping("/secured")
+    @GetMapping("/whoami")
     public String secured(@AuthenticationPrincipal UserPrincipal principal) {
         return "Ur logged in as user: " + principal.getUsername() + " with id: " + principal.getUserId();
     }
-
-    @GetMapping("/admin")
-    public String admin(@AuthenticationPrincipal UserPrincipal principal) {
-        return "Ur ADMIN: " + principal.getUsername() + " with id: " + principal.getUserId();
-    }
-
 }

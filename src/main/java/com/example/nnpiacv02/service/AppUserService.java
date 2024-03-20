@@ -24,7 +24,7 @@ public interface AppUserService {
 
     AppUser createNewAppUser(AppUserDtoInput appUserDtoInput, PasswordEncoder passwordEncoder);
 
-    AppUser updateAppUser(Long id, AppUserDtoInput appUserDtoInput) throws AppUserException;
+    AppUser updateAppUser(Long id, AppUserDtoInput appUserDtoInput, PasswordEncoder passwordEncoder) throws AppUserException;
 
     void deleteAppUser(Long id) throws AppUserException;
 
