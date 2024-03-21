@@ -31,7 +31,7 @@ class AppUserControllerTest {
 
     @Test
     @WithMockAdmin
-    public void testExistingUserEndpoint() throws Exception {
+    void testExistingUserEndpoint() throws Exception {
         String existingUserId = "1";
         mockMvc.perform(get("/users/admin/{id}", existingUserId))
                 .andExpect(status().isOk());
@@ -39,7 +39,7 @@ class AppUserControllerTest {
 
     @Test
     @WithMockAdmin
-    public void testNonExistingUserEndpoint() throws Exception {
+    void testNonExistingUserEndpoint() throws Exception {
         String existingUserId = "0";
         mockMvc.perform(get("/users/admin/{id}", existingUserId))
                 .andExpect(status().isNotFound());
