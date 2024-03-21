@@ -1,5 +1,7 @@
 package com.example.nnpiacv02.controller;
 
+import com.example.nnpiacv02.mock.WithMockAdmin;
+import com.example.nnpiacv02.mock.WithMockUser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,10 +10,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsStringIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -29,13 +30,58 @@ class AppUserControllerTest {
     }
 
     @Test
-    void listOfUsersEndpoint() throws Exception {
-        mockMvc.perform(get("/app-user/hello"))
+    @WithMockAdmin
+    public void testExistingUserEndpoint() throws Exception {
+        String existingUserId = "1";
+        mockMvc.perform(get("/users/admin/{id}", existingUserId))
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    void testNotLoggedInShouldNotSeeSecuredEndpoint() {
-//        mockMvc.perform(get("/api/v1/app-user/secured"))
-//    }
+    @Test
+    @WithMockAdmin
+    public void testNonExistingUserEndpoint() throws Exception {
+        String existingUserId = "0";
+        mockMvc.perform(get("/users/admin/{id}", existingUserId))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testListOfUsersEndpoint() throws Exception {
+        mockMvc.perform(get("/users/all"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testNotLoggedInShouldNotSeeSecuredEndpoint() throws Exception {
+        mockMvc.perform(get("/users/secured"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser
+    void testLoggedInShouldSeeSecuredEndpoint() throws Exception {
+        mockMvc.perform(get("/users/secured"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsStringIgnoringCase("user: fake_username with id: 1")));
+    }
+
+    @Test
+    void testNotLoggedInShouldNotSeeAdminEndpoint() throws Exception {
+        mockMvc.perform(get("/users/admin"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser
+    void testUserShouldNotSeeAdminEndpoint() throws Exception {
+        mockMvc.perform(get("/users/admin"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockAdmin
+    void testAdminShouldSeeAdminEndpoint() throws Exception {
+        mockMvc.perform(get("/users/admin"))
+                .andExpect(status().isOk());
+    }
 }

@@ -24,6 +24,8 @@ public class WebSecurityConfig {
 
     private final CustomAppUserDetailService customAppUserDetailService;
 
+    private final UnauthorizedHandler unauthorizedHandler;
+
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -32,12 +34,13 @@ public class WebSecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/**") //config works on the entire app (/api/**)
-                .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
+                .exceptionHandling(h -> h.authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("auth/login").permitAll()
                         .requestMatchers(("users/all")).permitAll()
-                        .requestMatchers(("users/admin/**")).hasRole("Admin") //v DB -> ROLE_Admin, Spring automaticky pracuje s tímto prefixem
+                        .requestMatchers(("users/admin/**")).hasRole("ADMIN") //v DB -> ROLE_Admin, Spring automaticky pracuje s tímto prefixem
                         .anyRequest().authenticated()
                 );
         return http.build();

@@ -52,7 +52,7 @@ public class AppUserController {
         return ResponseEntity.ok(appUserDto);
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/admin/create")
     public ResponseEntity<AppUserDto> createNewAppUser(@RequestBody @Validated AppUserDtoInput appUserDtoInput) {
         AppUserDto appUserDto = AppUserMapper.mapToAppUserDto(appUserService.createNewAppUser(appUserDtoInput, passwordEncoder));
         return new ResponseEntity<>(appUserDto, HttpStatus.CREATED);
@@ -71,8 +71,13 @@ public class AppUserController {
         return ResponseEntity.ok("User deleted " + id);
     }
 
-    @GetMapping("/whoami")
+    @GetMapping("/secured")
     public String secured(@AuthenticationPrincipal UserPrincipal principal) {
         return "Ur logged in as user: " + principal.getUsername() + " with id: " + principal.getUserId();
+    }
+
+    @GetMapping("/admin")
+    public String admin(@AuthenticationPrincipal UserPrincipal principal) {
+        return "Ur an admin";
     }
 }
